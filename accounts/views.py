@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import (
     authenticate,
     get_user_model,
@@ -21,7 +21,7 @@ def login_view(request):
         password = form.cleaned_data.get("password")
         user = authenticate(username=username, password=password)
         login(request, user)
-        print(request.user.is_authenticated())
+        return redirect("/tohome")
     return render(request, "accounts/form.html", {"form": form, "title": title})
 
 def register_view(request):
@@ -32,6 +32,9 @@ def register_view(request):
         password = form.cleaned_data.get('password')
         user.set_password(password)
         user.save()
+        new_user = authenticate(username=user.username, password=password)
+        login(request, new_user)
+        return redirect("/tohome")
     context = {"form": form, "title": title}
     return render(request, "accounts/form.html", context)
 

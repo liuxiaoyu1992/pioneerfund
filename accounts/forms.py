@@ -28,7 +28,6 @@ class UserRegisterForm(forms.ModelForm):
     email = forms.EmailField(label='Email Address')
     password = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
-    address = forms.CharField(label='Address')
     first_name = forms.CharField(label='First Name')
     last_name = forms.CharField(label='Last Name')
 
