@@ -13,7 +13,7 @@
     <title>Dashboard Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
 
 
     <link href="/static/css/pioneerfund.css" rel="stylesheet">
@@ -42,16 +42,18 @@
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-            </button>
-            <a class="navbar-brand page-scroll" href="/tohome">Pioneer Fund</a>
+
+            <a class="navbar-brand" href="/tohome">Pioneer Fund</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav left">
 
+
+                <li><a href="/logout" >Start a project</a></li>
+
+            </ul>
             <ul class="nav navbar-nav navbar-right">
 
 
@@ -89,6 +91,8 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          {% if request.user.is_authenticated %}Welcome {{ request.user.username }}
+{% else %}<a href="/login">Login</a>{% endif %}
           <h1 class="page-header">Dashboard</h1>
 
           <div class="row placeholders">
@@ -251,10 +255,5 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script src="../../assets/js/vendor/holder.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
