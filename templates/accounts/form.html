@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+    <div class="modal-dialog modal-sm">
+
+        <!-- Modal content no 1-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center form-title">{{ title }}</h4>
+            </div>
+            <div class="modal-body padtrbl">
+
+                <div class="login-box-body">
+                    <div class="form-group">
+                        <form method="POST" enctype='multipart/form-data' action="">
+                            {% csrf_token %}{{ form|crispy }}
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <div class="checkbox icheck">
+                                        <label>
+                                            <input type="checkbox" id="loginrem"> Remember Me
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-10">
+                                    <input type='submit' class='btn btn-green btn-block btn-flat' value='{{ title }}' />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock content %}
