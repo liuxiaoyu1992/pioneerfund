@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^logout/', log_out_view, name='logout'),
     url(r'^myprojects/', project_list, name='project_list'),
+
 ]

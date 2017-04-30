@@ -53,6 +53,8 @@ class Projects(models.Model):
                               blank=True,
                               )
     description = models.TextField(max_length=5000)
+    state = models.CharField(max_length=40, null=True)
+    country = models.CharField(max_length=40, null=True)
     minimum_amount = models.FloatField()
     maximum_amount = models.FloatField()
     end_date = models.DateField()
