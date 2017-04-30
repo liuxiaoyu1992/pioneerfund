@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-header">My Projects</h1>
+{% for obj in object_list %}
+{{ obj.pname }}<br/>
+
+{% endfor %}
+
+
+{% endblock content %}

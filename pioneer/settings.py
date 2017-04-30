@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'pioneer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'crowdfunding',
+        'NAME': 'pioneerfund',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
