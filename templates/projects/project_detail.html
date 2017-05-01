@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block full_content %}
+
+
+
+<div class="container">
+		<div class="masthead">
+			<h3>{{ project_name }}</h3>
+		</div>
+		<div class="row fs-head">
+			<div class="col-md-6 videocol">
+				<iframe src="//player.vimeo.com/video/23136511?title=0&byline=0&portrait=0"  frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+			</div>
+			<div class="col-md-6">
+				<h2 class="slimtop text-center"><strong>{{ slogan }}</strong></h2>
+				<div class="progress">
+					<div class="progress-bar" role="progressbar" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ pct }}%;">
+					</div>
+				</div>
+				<div class="row">
+                    <div class="col-md-3 text-center">
+						<h1 class="slimtop">{{ project_minimum_amount }}</h1>
+						<p class="lead">minimum amount</p>
+					</div>
+                    <div class="col-md-3 text-center">
+						<h1 class="slimtop">{{ project_maximum_amount }}</h1>
+						<p class="lead">maximum amount</p>
+					</div>
+					<div class="col-md-3 text-center">
+						<h1 class="slimtop">{{ project_percent }}%</h1>
+						<p class="lead">complete</p>
+					</div>
+					<div class="col-md-3 text-center">
+						<h1 class="slimtop">{{ project_backers }}</h1>
+						<p class="lead">backers</p>
+					</div>
+					<div class="col-md-3 text-center">
+						<h1 class="slimtop">${{ project_amount_pledged }}</h1>
+						<p class="lead">pledged of ${{ project_minimum_amount }}</p>
+					</div>
+					<div class="col-md-3 text-center">
+						<h1 class="slimtop">{% if days >= 0 %}{{ days }}{% else %}0{% endif %}</h1>
+						<p class="lead">day{% if days != 1 %}s{% endif %} left</p>
+					</div>
+				</div>
+				{% if project_status != 'looking for funds' %}
+				<a class="btn btn-lg btn-primary btn-block disabled" href="/c/choose"><i class="icon-ok"></i> Campaign Ended</a>
+				{% else %}
+				<a class="btn btn-lg btn-success btn-block" href="/c/choose"><i class="icon-ok"></i> Contribute Now</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+<br>
+<br>
+{% block project_detail %}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Description</a></li>
+      <li><a href="{{ instance.get_project_updates }}">Updates</a></li>
+      <li><a href="{{ instance.get_project_comments }}">Comments</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <h3>{{ project_name }}</h3>
+  <p>{{ project_description }}</p>
+</div>
+
+{% endblock project_detail %}
+{% endblock full_content %}
