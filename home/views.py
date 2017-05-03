@@ -1,10 +1,13 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import Projects
+from .models import Projects, CreditCards
 from django.conf import settings
 import datetime
 from projects.forms import ProjectCreateForm
 from django.contrib.auth import get_user_model
+from .forms import CreditCardAddForm
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 # Create your views here.
 
@@ -21,8 +24,8 @@ def project_create(request):
         project.uid = User.objects.get(id=request.user.id)
         image = form.cleaned_data['image']
         project.save()
-        print('image')
-        print(image)
+        messages.success(request, "Successfully Created")
+        return HttpResponseRedirect(project.get_project_detail)
     context = {
         "form": form,
         "title": 'Project Create'
@@ -61,3 +64,31 @@ def project_update(request):
 
 def project_delete(request):
     return HttpResponse("<h1>Hello!</h1>")
+
+def payment_methods(request):
+    queryset = CreditCards.objects.filter(uid_id=request.user.id)
+    context = {
+        "object_list": queryset,
+        "title": "Credit cards"
+    }
+    return render(request, 'home/payment_methods.html', context)
+
+def creditcard_add(request):
+    form = CreditCardAddForm(request.POST or None)
+    if form.is_valid():
+        creditcatd = form.save(commit=False)
+        creditcatd.uid = User.objects.get(id=request.user.id)
+        creditcatd.save()
+        return redirect("/home/payment_methods")
+    context = {
+        "form": form,
+        "title": "Add Credit Card"
+    }
+    return render(request, "home/creditcard_add.html", context)
+
+def creditcard_delete(request, id=None):
+    instance = get_object_or_404(CreditCards, id=id)
+    instance.delete()
+    messages.success(request, "Successfully deleted")
+    return redirect("home:payment_methods")
+

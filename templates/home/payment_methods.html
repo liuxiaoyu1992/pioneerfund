@@ -1,0 +1,26 @@
+{% extends "homebase.html" %}
+{% block content %}
+<h1 class="page-header">Payment Methods</h1>
+<p align="right"><a href="/home/creditcard_add" class="btn btn-primary" role="button">Add a credit card</a></p>
+
+<table class=table>
+    <thead>
+    <tr>
+        <th>Credit card number</th>
+        <th>Name</th>
+        <th>Edit</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for obj in object_list %}
+    <tr>
+
+        <td>{{ obj.cnum }}</td>
+        <td>{{ obj.name }}</td>
+        <td><a href="/home/creditcard_delete/{{ obj.id }}" class="btn btn-danger btn-block btn-flat" role="button">Delete</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

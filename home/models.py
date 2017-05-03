@@ -2,6 +2,7 @@ from django.db import models
 import os
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from .fields import CreditCardField, ExpiryDateField, VerificationValueField
 # Create your models here.
 
 def upload_location(instance, filename):
@@ -84,12 +85,12 @@ class Projects(models.Model):
 
     def get_project_comments(self):
         return reverse("projects:project_comments", kwargs={"id": self.id})
-# class CreditCards(models.Model):
-#     cnum = models.CharField(max_length=40, primary_key=True)
-#     exp_date = models.DateField()
-#     first_name = models.CharField(max_length=40)
-#     last_name = models.CharField(max_length=40)
-#     uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+
+class CreditCards(models.Model):
+    cnum = models.CharField(max_length=40)
+    exp_date = models.DateField()
+    name = models.CharField(max_length=50)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
 #
 #
 # class Pledges(models.Model):
@@ -117,5 +118,7 @@ class Projects(models.Model):
 #         ('succeeded', 'succeeded'),
 #         ('failed', 'failed')
 #     )
+
+
 
 

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
-{% block full_content %}
 {% load crispy_forms_tags %}
+{% block full_content %}
 
 {% block style %}
 
 <style>
     .modal-dialog{
     position: relative;
-    display: table; //This is important
+    display: table;
     overflow-y: auto;
     overflow-x: auto;
     width: auto;
@@ -17,7 +17,7 @@
 
 {% endblock style %}
 
-<div class="modal-dialog">
+<div class="modal-dialog modal-xs">
 
         <!-- Modal content no 1-->
         <div class="modal-content">
@@ -36,7 +36,7 @@
                                     <input type='submit' class='btn btn-success btn-block btn-flat' value='Submit' />
                                 </div>
                                 <div class="col-xs-4">
-                                    <a href="/home/myprojects" class="btn btn-danger btn-block btn-flat" role="button">Cancel</a>
+                                    <a href="/home/payment_methods" class="btn btn-danger btn-block btn-flat" role="button">Cancel</a>
                                 </div>
                             </div>
                         </form>
@@ -46,5 +46,8 @@
         </div>
 
     </div>
+
+
+
 
 {% endblock full_content %}
