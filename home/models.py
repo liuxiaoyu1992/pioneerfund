@@ -86,38 +86,57 @@ class Projects(models.Model):
     def get_project_comments(self):
         return reverse("projects:project_comments", kwargs={"id": self.id})
 
+    def get_pledge_url(self):
+        return reverse("projects:pledge_add", kwargs={"id": self.id})
+
 class CreditCards(models.Model):
     cnum = models.CharField(max_length=40)
     exp_date = models.DateField()
     name = models.CharField(max_length=50)
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+
+    def __str__(self):
+        return self.cnum
 #
 #
-# class Pledges(models.Model):
-#     amount = models.FloatField()
-#     cnum = models.CharField(max_length=40)
-#     uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
-#     pid = models.ForeignKey(Projects, on_delete=models.CASCADE)
-#     ptime = models.DateTimeField(auto_now_add=True)
-#     status = (
-#         ('pending', 'pending'),
-#         ('succeeded', 'succeeded'),
-#         ('failed', 'failed')
-#     )
+class Pledges(models.Model):
+    amount = models.FloatField()
+    cnum = models.ForeignKey(CreditCards, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    pid = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    ptime = models.DateTimeField(auto_now_add=True)
+    status_choices = (
+        ('pending', 'pending'),
+        ('succeeded', 'succeeded'),
+        ('failed', 'failed')
+    )
+    status = models.CharField(
+        max_length=40,
+        choices=status_choices,
+        default='pending'
+    )
+
+
+
 #
 #
 #
-# class Charges:
-#     uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
-#     pid = models.ForeignKey(Projects, on_delete=models.CASCADE)
-#     cnum = models.ForeignKey(CreditCards, on_delete=models.CASCADE)
-#     amount = models.FloatField()
-#     ptime = models.DateTimeField()
-#     charge_time = models.DateTimeField()
-#     status = (
-#         ('succeeded', 'succeeded'),
-#         ('failed', 'failed')
-#     )
+class Charges(models.Model):
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    pid = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    cnum = models.ForeignKey(CreditCards, on_delete=models.CASCADE)
+    amount = models.FloatField()
+    ptime = models.DateTimeField()
+    charge_time = models.DateTimeField()
+    status_choices = (
+        ('succeeded', 'succeeded'),
+        ('failed', 'failed')
+    )
+    status = models.CharField(
+        max_length=40,
+        choices=status_choices,
+        default='succeeded'
+    )
 
 
 

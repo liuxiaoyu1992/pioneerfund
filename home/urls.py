@@ -6,7 +6,7 @@ from .views import (
     project_create,
     payment_methods,
     creditcard_add,
-    creditcard_delete
+    creditcard_delete,
 )
 
 urlpatterns = [

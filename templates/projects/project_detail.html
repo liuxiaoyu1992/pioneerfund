@@ -46,7 +46,7 @@
 				{% if project_status != 'looking for funds' %}
 				<a class="btn btn-lg btn-primary btn-block disabled" href="/c/choose"><i class="icon-ok"></i> Campaign Ended</a>
 				{% else %}
-				<a class="btn btn-lg btn-success btn-block" href="/c/choose"><i class="icon-ok"></i> Contribute Now</a>
+				<a class="btn btn-lg btn-success btn-block" href="{{ instance.get_pledge_url }}"><i class="icon-ok"></i> Contribute Now</a>
 				{% endif %}
 			</div>
 		</div>
