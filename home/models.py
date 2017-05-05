@@ -53,7 +53,11 @@ class Projects(models.Model):
     image = models.ImageField(upload_to='project_picture/%y%m%d',
                               null=True,
                               blank=True,
-                              )
+                              width_field="width_field",
+                              height_field="height_field")
+    height_field = models.IntegerField(default=0)
+    width_field = models.IntegerField(default=0)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='project_likes')
     description = models.TextField(max_length=5000)
     state = models.CharField(max_length=40, null=True)
     country = models.CharField(max_length=40, null=True)
@@ -88,6 +92,12 @@ class Projects(models.Model):
 
     def get_pledge_url(self):
         return reverse("projects:pledge_add", kwargs={"id": self.id})
+
+    def get_like_url(self):
+        return reverse("projects:like_toggle", kwargs={"id": self.id})
+
+    def get_api_like_url(self):
+        return reverse("projects:api_like_toggle", kwargs={"id": self.id})
 
 class CreditCards(models.Model):
     cnum = models.CharField(max_length=40)

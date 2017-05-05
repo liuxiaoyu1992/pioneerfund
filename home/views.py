@@ -25,7 +25,8 @@ def project_create(request):
     if form.is_valid():
         project = form.save(commit=False)
         project.uid = User.objects.get(id=request.user.id)
-        image = form.cleaned_data['image']
+        print("image")
+        print(project.image)
         project.save()
         messages.success(request, "Successfully Created")
         return HttpResponseRedirect(project.get_project_detail)

@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 {% block full_content %}
 
+{% block style %}
 
+<script>
+$(document).ready(function(){
+    $(".nav-tabs a").click(function(){
+        $(this).tab('show');
+    });
+});
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+{% endblock style %}
 
 <div class="container">
 		<div class="masthead">
@@ -10,6 +25,9 @@
 		<div class="row fs-head">
 			<div class="col-md-6 videocol">
 				<iframe src="//player.vimeo.com/video/23136511?title=0&byline=0&portrait=0"  frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+			</div>
+			<div class="col-md-4">
+				<p><a class='like-btn' data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'>{{ instance.likes.count }} Like</a></p>
 			</div>
 			<div class="col-md-6">
 				<h2 class="slimtop text-center"><strong>{{ slogan }}</strong></h2>
@@ -43,10 +61,14 @@
 						<p class="lead">day{% if days != 1 %}s{% endif %} left</p>
 					</div>
 				</div>
-				{% if project_status != 'looking for funds' %}
-				<a class="btn btn-lg btn-primary btn-block disabled" href="/c/choose"><i class="icon-ok"></i> Campaign Ended</a>
+				{% if project_status == 'looking for funds' %}
+				<a class="btn btn-lg btn-success btn-block" href="{{ instance.get_pledge_url }}"><i class="icon-ok"></i>Contribute Now</a>
+				{% elif project_status == 'pledge succeeded' %}
+				<a class="btn btn-lg btn-primary btn-block disabled" href=""><i class="icon-ok"></i>pledge succeeded</a>
+				{% elif project_status == 'pledge failed' %}
+				<a class="btn btn-lg btn-primary btn-block disabled" href=""><i class="icon-ok"></i>pledge failed</a>
 				{% else %}
-				<a class="btn btn-lg btn-success btn-block" href="{{ instance.get_pledge_url }}"><i class="icon-ok"></i> Contribute Now</a>
+				<a class="btn btn-lg btn-primary btn-block disabled" href=""><i class="icon-ok"></i>Completed</a>
 				{% endif %}
 			</div>
 		</div>
@@ -55,21 +77,37 @@
 <br>
 <br>
 {% block project_detail %}
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Description</a></li>
-      <li><a href="{{ instance.get_project_updates }}">Updates</a></li>
-      <li><a href="{{ instance.get_project_comments }}">Comments</a></li>
-    </ul>
-  </div>
-</nav>
-
 <div class="container">
-  <h3>{{ project_name }}</h3>
-  <p>{{ project_description }}</p>
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#home">Description</a></li>
+    <li><a href="#menu1">Comments</a></li>
+    <li><a href="#menu2">Updates</a></li>
+    <li><a href="#menu3"></a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <h3>HOME</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+      <h3>Menu 1</h3>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <div id="menu2" class="tab-pane fade">
+      <h3>Menu 2</h3>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+    </div>
+    <div id="menu3" class="tab-pane fade">
+      <h3>Menu 3</h3>
+      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+    </div>
+  </div>
+
 </div>
+
+
 
 {% endblock project_detail %}
 {% endblock full_content %}
