@@ -2,19 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.conf import settings
+from django.urls import reverse_lazy
+
 # Create your models here.
-
-
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile')
-    address = models.CharField(max_length=100, blank=False)
-    city = models.CharField(max_length=30, blank=False)
-    state = models.CharField(max_length=30, blank=False)
-    country = models.CharField(max_length=30, blank=False)
-    interests = models.CharField(max_length=100, blank=False)
-    following = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='followed_by')
 
 class UserProfileManager(models.Manager):
     use_for_related_fields = True
@@ -45,6 +35,34 @@ class UserProfileManager(models.Manager):
         if followed_by_user in user_profile.following.all():
             return True
         return False
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile')
+    address = models.CharField(max_length=100, blank=False)
+    city = models.CharField(max_length=30, blank=False)
+    state = models.CharField(max_length=30, blank=False)
+    country = models.CharField(max_length=30, blank=False)
+    interests = models.CharField(max_length=100, blank=False)
+    following = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='followed_by')
+
+    objects = UserProfileManager()  # UserProfile.objects.all()
+
+    # abc = UserProfileManager() # UserProfile.abc.all()
+
+    def __str__(self):
+        return str(self.following.all().count())
+
+    def get_following(self):
+        users = self.following.all()  # User.objects.all().exclude(username=self.user.username)
+        return users.exclude(username=self.user.username)
+
+    def get_follow_url(self):
+        return reverse_lazy("profiles:follow", kwargs={"username": self.user.username})
+
+    def get_absolute_url(self):
+        return reverse_lazy("profiles:detail", kwargs={"username": self.user.username})
+
 
 def post_save_user_receiver(sender, instance, created, *args, **kwargs):
     if created:
