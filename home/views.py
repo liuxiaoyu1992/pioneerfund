@@ -21,7 +21,7 @@ def index(request):
 
 
 def project_create(request):
-    form = ProjectCreateForm(request.POST or None)
+    form = ProjectCreateForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         project = form.save(commit=False)
         project.uid = User.objects.get(id=request.user.id)
@@ -44,7 +44,7 @@ def project_detail(request, id=None):
         "project_id": instance.id,
         "project_minimum_amount": instance.minimum_amount,
         "project_maximum_amount": instance.maximum_amount,
-        "days": (datetime.date.today() - instance.end_date).days,
+        "days": (instance.end_date - datetime.date.today()).days,
         "project_backers": instance.pledged_people_num,
         "project_amount_pledged": instance.pledged_amount,
         "project_description": instance.description,
@@ -122,7 +122,7 @@ def pledge_to_project(sender, instance, created, **kwargs):
         project.pledged_amount += instance.amount
         print("uid")
         print(instance.uid_id)
-        count = Pledges.objects.filter(uid_id=instance.uid_id).count()
+        count = Pledges.objects.filter(uid_id=instance.uid_id, pid_id=instance.pid.id).count()
         print("count")
         print(count)
         if count == 1:

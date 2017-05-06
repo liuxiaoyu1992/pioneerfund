@@ -31,7 +31,7 @@ def project_updates(request, id=None):
         "project_id": instance.id,
         "project_minimum_amount": instance.minimum_amount,
         "project_maximum_amount": instance.maximum_amount,
-        "days": (datetime.date.today() - instance.end_date).days,
+        "days": (instance.end_date - datetime.date.today()).days,
         "project_backers": instance.pledged_people_num,
         "project_amount_pledged": instance.pledged_amount,
         "project_description": instance.description,

@@ -50,7 +50,7 @@ class Projects(models.Model):
     pname = models.CharField(max_length=50)
     cate_name = models.ForeignKey(Categories, on_delete=models.CASCADE)
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
-    image = models.ImageField(upload_to='project_picture/%y%m%d',
+    image = models.ImageField(upload_to=upload_location,
                               null=True,
                               blank=True,
                               width_field="width_field",
