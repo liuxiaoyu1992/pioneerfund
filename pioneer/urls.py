@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^', include('accounts.urls', namespace='profiles')),
     url(r'^home/', include('home.urls', namespace='home')),
     url(r'^projects/', include('projects.urls', namespace='projects')),
+    url(r'^comments/', include("comments.urls", namespace='comments')),
 ]
 
 if settings.DEBUG:

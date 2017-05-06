@@ -3,6 +3,8 @@ import os
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from .fields import CreditCardField, ExpiryDateField, VerificationValueField
+from comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 # Create your models here.
 
 def upload_location(instance, filename):
@@ -98,6 +100,18 @@ class Projects(models.Model):
 
     def get_api_like_url(self):
         return reverse("projects:api_like_toggle", kwargs={"id": self.id})
+
+    @property
+    def comments(self):
+        instance = self
+        qs = Comment.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
 
 class CreditCards(models.Model):
     cnum = models.CharField(max_length=40)
