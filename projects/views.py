@@ -84,3 +84,6 @@ class ProjectLikeAPIToggle(APIView):
             "liked": liked
         }
         return Response(data)
+
+def project_explore(request):
+    return render(request, 'explore.html')

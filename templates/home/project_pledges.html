@@ -7,16 +7,17 @@
         <th>Project name</th>
         <th>Pledge amount</th>
         <th>Time</th>
-
+        <th>Status</th>
     </tr>
     </thead>
     <tbody>
     {% for obj in object_list %}
     <tr>
 
-        <td>{{ obj.pid_id }}</td>
-        <td>{{ obj.amount }}</td>
+        <td>{{ obj.pid.pname }}</td>
+        <td>{{ obj.amount }}$</td>
         <td>{{ obj.ptime }}</td>
+        <td>{{ obj.status }}</td>
     </tr>
     {% endfor %}
     </tbody>
