@@ -6,9 +6,12 @@ from django.contrib.auth import (
     logout
 )
 from .models import UserProfile
-from .forms import UserLoginForm, UserRegisterForm
+from .forms import UserLoginForm, UserRegisterForm, EditProfileForm, UserProfileForm
 from django.views.generic import DetailView
 from django.views import View
+from django.urls import reverse
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 
 User = get_user_model()
@@ -45,6 +48,51 @@ def register_view(request):
 def log_out_view(request):
     logout(request)
     return render(request, "accounts/logout.html")
+
+
+def edit_profile(request):
+    title = 'Edit profile'
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('profiles:tohome'))
+    else:
+        form = EditProfileForm(instance=request.user)
+        context = {"form": form, "title": title}
+        return render(request, 'accounts/edit_profile.html', context)
+
+def edit_personal_profile(request):
+    title = 'Edit personal profile'
+    user_profile = request.user.profile
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=user_profile)
+
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('profiles:tohome'))
+    else:
+        form = UserProfileForm(instance=user_profile)
+        context = {"form": form, "title": title}
+        return render(request, 'accounts/edit_profile.html', context)
+
+def change_password(request):
+    title = 'Change password'
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect(reverse('profiles:tohome'))
+        else:
+            return redirect(reverse('profiles:change_password'))
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+        context = {"form": form, "title": title}
+        return render(request, 'accounts/change_password.html', context)
 
 
 class UserDetailView(DetailView):

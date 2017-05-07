@@ -5,8 +5,11 @@ from django.contrib.auth import (
     login,
     logout
 )
-from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from .models import (
+    UserProfile
+)
+from django.core.files.images import get_image_dimensions
 User = get_user_model()
 
 class UserLoginForm(forms.Form):
@@ -55,3 +58,72 @@ class UserRegisterForm(forms.ModelForm):
         if password != password2:
             raise forms.ValidationError('Password must match')
         return password
+
+class EditProfileForm(UserChangeForm):
+    template_name='/something/else'
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'first_name',
+            'last_name',
+            'password'
+        )
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        exclude = ['password']
+        fields = (
+            'avatar',
+            'address',
+            'city',
+            'state',
+            'country',
+            'interests',
+
+        )
+        labels = {
+            'avatar': 'Avatar',
+            'address': 'Address',
+            'city': 'City',
+            'state': 'State',
+            'country': 'Country',
+            'interests': 'Interests',
+
+        }
+
+    # def clean_avatar(self):
+    #     avatar = self.cleaned_data['avatar']
+    #
+    #     try:
+    #         w, h = get_image_dimensions(avatar)
+    #
+    #         # validate dimensions
+    #         max_width = max_height = 100
+    #         if w > max_width or h > max_height:
+    #             raise forms.ValidationError(
+    #                 u'Please use an image that is '
+    #                 '%s x %s pixels or smaller.' % (max_width, max_height))
+    #
+    #         # validate content type
+    #         main, sub = avatar.content_type.split('/')
+    #         if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
+    #             raise forms.ValidationError(u'Please use a JPEG, '
+    #                                         'GIF or PNG image.')
+    #
+    #         # validate file size
+    #         if len(avatar) > (20 * 1024):
+    #             raise forms.ValidationError(
+    #                 u'Avatar file size may not exceed 20k.')
+    #
+    #     except AttributeError:
+    #         """
+    #         Handles case when we are updating the user profile
+    #         and do not supply a new avatar
+    #         """
+    #         pass
+    #
+    #     return avatar

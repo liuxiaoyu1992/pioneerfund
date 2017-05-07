@@ -14,6 +14,7 @@ from comments.models import Comment
 from comments.forms import CommentForm
 from django.contrib.contenttypes.models import ContentType
 import datetime
+from django.db.models import Q
 
 # Create your views here.
 
@@ -97,6 +98,30 @@ def project_list(request):
         "title": "List"
     }
     return render(request, "home/project_list.html", context)
+
+def project_back_list(request):
+    my_pledges = Pledges.objects.filter(uid_id=request.user.id).values()
+    project_ids = set()
+    for pled in my_pledges:
+        project_ids.add(pled['pid_id'])
+    my_filter_qs = Q()
+    for project_id in project_ids:
+        my_filter_qs = my_filter_qs | Q(id=project_id)
+    queryset = Projects.objects.filter(my_filter_qs)
+    print(queryset)
+    context = {
+        "object_list": queryset,
+        "title": "List"
+    }
+    return render(request, "home/project_list.html", context)
+
+def project_pledges(request):
+    queryset = Pledges.objects.filter(uid_id=request.user.id)
+    context = {
+        "object_list": queryset,
+        "title": "List"
+    }
+    return render(request, "home/project_pledges.html", context)
 
 def project_update(request):
     return HttpResponse("<h1>Hello!</h1>")

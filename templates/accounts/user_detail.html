@@ -1,9 +1,40 @@
 {% extends "base.html" %}
+
+
+{% block style %}
+<script>
+$(document).ready(function(){
+    $(".nav-tabs a").click(function(){
+        $(this).tab('show');
+    });
+});
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+      .nav-tabs > li, .nav-pills > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+     zoom:1; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs, .nav-pills {
+    text-align:center;
+}
+</style>
+{% endblock style %}
+
+
 {% block full_content %}
 
 <div class='row'>
     <div class='col-sm-3 col-xs-12'>
-        <h1>{{ object.username }} </h1>
+        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+        <!--<h1>{{ object.username }} </h1>-->
         <hr/>
         <p>Followers: {{ object.followed_by.all.count }}</p>
         <p>
@@ -12,7 +43,39 @@
                 </a>
         </p>
          <hr/>
-          <h1>Following <small>{{ object.profile.get_following.count }}</small></h1>
+
+
+
+          <hr/>
+
+
+
+    </div>
+</div>
+
+
+
+
+
+<div class="container">
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#home">Backed</a></li>
+    <li><a href="#menu1">Created</a></li>
+    <li><a href="#menu2">Following</a></li>
+    <li><a href="#menu3">Followed by</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <h3>HOME</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+
+    </div>
+    <div id="menu2" class="tab-pane fade">
+        <h1>Following <small>{{ object.profile.get_following.count }}</small></h1>
 
              {% for user in object.profile.get_following %}
              <a href='/{{ user.username }}'>{{ user.username }}</a><br/>
@@ -21,17 +84,16 @@
              {% endfor %}
 
           <hr/>
-          <h1>Followed By</h1>
+    </div>
+    <div id="menu3" class="tab-pane fade">
+            <h1>Followed By</h1>
              {% for profile in object.followed_by.all %}
              <a href='/{{ profile.user.username }}'>{{ profile.user.username }}</a><br/>
              {% empty %}
              <h4>Not followed by any users</h4>
              {% endfor %}
-
-          <hr/>
-
-
-
     </div>
+  </div>
+
 </div>
 {% endblock full_content %}

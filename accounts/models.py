@@ -45,6 +45,9 @@ class UserProfile(models.Model):
     country = models.CharField(max_length=30, blank=False)
     interests = models.CharField(max_length=100, blank=False)
     following = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='followed_by')
+    avatar = models.ImageField(upload_to='avatar/',
+                               default='avatar/default.png',
+                              )
 
     objects = UserProfileManager()  # UserProfile.objects.all()
 
