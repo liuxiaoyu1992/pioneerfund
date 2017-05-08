@@ -1,23 +1,34 @@
 {% extends "homebase.html" %}
 
 {% block content %}
-<h1 class="page-header">My Projects</h1>
+<h1 class="page-header">{{ title }}</h1>
 {% for obj in object_list %}
 <div class="row">
-  <div class="col-sm-12">
+  <div class="col-md-8 col-md-8">
     <div class="thumbnail">
         {% if obj.image %}
          <img src='{{ obj.image.url }}' class='img-responsive' />
         {% endif %}
       <div class="caption post-detail-item">
-        {% if obj.draft %}<h3>Staff only: Draft</h3>{% endif %} {% if obj.publish > today %}<h3>Staff Only: Future Post</h3>{% endif %}
+
           <h3><a href='{{ obj.get_project_detail }}'>{{ obj.pname }}</a></h3>
-          <h6>{{ obj.pname }}</h6>
-        {{ obj.get_markdown|truncatechars_html:120 }}
+          <h6>{{ obj.description }}</h6>
+          <h4>Status: {{ obj.status }}</h4>
+          {% if user_id == obj.uid_id and obj.status != "completed" %}
+            <a href="{{ obj.get_project_edit }}" class="btn btn-primary btn-block btn-flat" role="button">Edit</a>
+            <a href="{{ obj.get_project_delete }}" class="btn btn-danger btn-block btn-flat" role="button">Delete</a>
+
+          {% endif %}
+          {% if user_id == obj.uid_id and obj.status == "pledge succeeded" %}
+            <a href="{{ obj.get_project_update }}" class="btn btn-primary btn-block btn-flat" role="button">Update project process</a>
+          {% endif %}
+          {% if user_id == obj.uid_id and obj.status == "pledge succeeded" %}
+            <a href="{{ obj.get_project_complete }}" class="btn btn-success btn-block btn-flat" role="button">Complete</a>
+          {% endif %}
       </div>
     </div>
   </div>
-<hr/>
+
 </div>
 
 {% endfor %}

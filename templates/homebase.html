@@ -5,27 +5,20 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-              <li><a href="/edit_profile">Edit profile</a></li>
+            <li><a href="#">Activities <span class="sr-only">(current)</span></a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href="/edit_profile">Edit profile</a></li>
               <li><a href="/change_password">Change password</a></li>
               <li><a href="/edit_personal_profile">Edit personal profile</a></li>
+              <li><a href="/home/payment_methods">Payment methods</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
             <li><a href="/home/myprojects">Created projects</a></li>
               <li><a href="/home/my_backed_projects">Backed projects</a></li>
-            <li><a href="/home/payment_methods">Payment methods</a></li>
               <li><a href="/home/my_pledges">Pledges</a></li>
-
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
+              <li><a href="/home/my_charges">Charges</a></li>
+              <li><a href="/home/my_likes">Likes</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -35,11 +28,19 @@
           <a href="/login">Login</a>{% endif %}
 
           {% block content %}
-          <h1 class="page-header">Dashboard</h1>
-
-
-
-
+          <h1 class="page-header">Activities</h1>
+          <h3>Created</h3>
+          {% if recent_created_projects %}
+          {% for obj in recent_created_projects %}
+          <p>Created {{ obj.pname }} on {{ obj.created_at }}</p>
+          {% endfor %}
+          {% endif %}
+          <h3>Pledges</h3>
+          {% if recent_pledges %}
+          {% for obj in recent_pledges %}
+          <p>Pledged {{ obj.amount }} $ to {{ obj.pid_id }} on {{ obj.ptime }}</p>
+          {% endfor %}
+          {% endif %}
           {% endblock content %}
 
 

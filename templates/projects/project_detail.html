@@ -29,16 +29,44 @@ $(document).ready(function(){
 		<div class="row fs-head">
 			<div class="col-md-6">
 				<p><a class='like-btn' data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'>{{ instance.likes.count }} Like</a></p>
-				{% if instance.image %}
+                <p>by <a href='/{{ instance.uid.username }}'> {{ instance.uid.first_name }} {{ instance.uid.last_name }}</a><br/></p>
+                <p>
+                    Average rate:
+                    {% if project_rated == 0 %}
+                    This project has not been rated.
+                    {% else %}
+                    {{ avg_rate }}
+                    {% endif %}
+                </p>
+                <p>
+                    {% if instance.status != "completed" %}
+                    You can only rate after the project is completed.
+                    {% elif rate_permission == 0 %}
+                    Only users who pledged this project can rate.
+                    {% elif already_rated == 1 %}
+                    You have already rated this project.
+                    {% else %}
+                    <div class="col-xs-4">
+                        <a class="btn btn-sm btn-success" href="{{ instance.get_project_rate }}"><i class="icon-ok"></i>Rate</a>
+                    </div>
+                    {% endif %}
+                </p>
+                {% if instance.image %}
     				<img src='{{ instance.image.url }}' class='img-responsive' />
     			{% endif %}
+                <p>
+                    Tags:
+                    {% for tag in instance.tags.all %}
+                    {{ tag.name }}
+                    {% endfor %}
+                </p>
 
 			</div>
 
 			<div class="col-md-6">
 				<h2 class="slimtop text-center"><strong>{{ slogan }}</strong></h2>
 				<div class="progress">
-					<div class="progress-bar" role="progressbar" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ pct }}%;">
+					<div class="progress-bar" role="progressbar" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ project_percent }}%;">
 					</div>
 				</div>
 				<div class="row">
@@ -89,13 +117,13 @@ $(document).ready(function(){
     <li class="active"><a href="#home">Description</a></li>
     <li><a href="#menu1">Comments</a></li>
     <li><a href="#menu2">Updates</a></li>
-    <li><a href="#menu3"></a></li>
+
   </ul>
 
   <div class="tab-content">
     <div id="home" class="tab-pane fade in active">
-      <h3>HOME</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <br/>
+      <p>{{ instance.description }}</p>
     </div>
     <div id="menu1" class="tab-pane fade">
       <div>
@@ -140,12 +168,12 @@ $(document).ready(function(){
     </div>
     </div>
     <div id="menu2" class="tab-pane fade">
+        {% for update in project_updates %}
+        <p>{{ update.updates }}</p>
+        <p>{{ update.created_at }}</p>
+        {% endfor %}
+    </div>
 
-    </div>
-    <div id="menu3" class="tab-pane fade">
-      <h3>Menu 3</h3>
-      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    </div>
   </div>
 
 </div>

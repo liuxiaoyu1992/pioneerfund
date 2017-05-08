@@ -3,97 +3,133 @@
 
 {% block style %}
 <script>
-$(document).ready(function(){
-    $(".nav-tabs a").click(function(){
-        $(this).tab('show');
+    $(document).ready(function () {
+        $(".nav-tabs a").click(function () {
+            $(this).tab('show');
+        });
     });
-});
 </script>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <style>
-      .nav-tabs > li, .nav-pills > li {
-    float:none;
-    display:inline-block;
-    *display:inline; /* ie7 fix */
-     zoom:1; /* hasLayout ie7 trigger */
-}
+    .nav-tabs > li, .nav-pills > li {
+        float: none;
+        display: inline-block;
+        *display: inline; /* ie7 fix */
+        zoom: 1; /* hasLayout ie7 trigger */
+    }
 
-.nav-tabs, .nav-pills {
-    text-align:center;
-}
+    .nav-tabs, .nav-pills {
+        text-align: center;
+    }
+
+    div.centre {
+        width: 200px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
 </style>
 {% endblock style %}
 
 
 {% block full_content %}
 
-<div class='row'>
-    <div class='col-sm-3 col-xs-12'>
-        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+<div class='row centre'>
+    <div class='col-md-12 col-xs-10'>
+        <h2><img src='{{ profiles.avatar.url }}' class='img-responsive'/> {{ user.first_name }} {{ user.last_name }}
+        </h2>
         <!--<h1>{{ object.username }} </h1>-->
-        <hr/>
-        <p>Followers: {{ object.followed_by.all.count }}</p>
-        <p>
-            <a class='btn btn-link' href='{{ object.profile.get_follow_url }}'>
-                    {% if following %}Unfollow{% else %}Follow{% endif %}
-                </a>
-        </p>
-         <hr/>
 
+        <!--<p>Followers: {{ object.followed_by.all.count }}</p>-->
 
-
-          <hr/>
-
+        <a class='btn btn-link' href='{{ object.profile.get_follow_url }}'>
+            {% if following %}Unfollow{% else %}Follow{% endif %}
+        </a>
 
 
     </div>
 </div>
 
 
-
-
-
 <div class="container">
 
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#home">Backed</a></li>
-    <li><a href="#menu1">Created</a></li>
-    <li><a href="#menu2">Following</a></li>
-    <li><a href="#menu3">Followed by</a></li>
-  </ul>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#home">Created</a></li>
+        <li><a href="#menu1">Backed</a></li>
+        <li><a href="#menu2">Following</a></li>
+        <li><a href="#menu3">Followed by</a></li>
+    </ul>
 
-  <div class="tab-content">
-    <div id="home" class="tab-pane fade in active">
-      <h3>HOME</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
-    <div id="menu1" class="tab-pane fade">
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            {% for obj in created_projects %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="thumbnail">
+                        {% if obj.image %}
+                        <img src='{{ obj.image.url }}' class='img-responsive'/>
+                        {% endif %}
+                        <div class="caption post-detail-item">
 
-    </div>
-    <div id="menu2" class="tab-pane fade">
-        <h1>Following <small>{{ object.profile.get_following.count }}</small></h1>
+                            <h3><a href='{{ obj.get_project_detail }}'>{{ obj.pname }}</a></h3>
+                            <h6>{{ obj.description }}</h6>
 
-             {% for user in object.profile.get_following %}
-             <a href='/{{ user.username }}'>{{ user.username }}</a><br/>
-             {% empty %}
-             <h4>Not following any users</h4>
-             {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+            </div>
 
-          <hr/>
-    </div>
-    <div id="menu3" class="tab-pane fade">
+            {% endfor %}
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            {% for obj in backed_projects %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="thumbnail">
+                        {% if obj.image %}
+                        <img src='{{ obj.image.url }}' class='img-responsive'/>
+                        {% endif %}
+                        <div class="caption post-detail-item">
+
+                            <h3><a href='{{ obj.get_project_detail }}'>{{ obj.pname }}</a></h3>
+                            <h6>{{ obj.description }}</h6>
+
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+
+            {% endfor %}
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <h1>Following
+                <small>{{ object.profile.get_following.count }}</small>
+            </h1>
+
+            {% for user in object.profile.get_following %}
+            <a href='/{{ user.username }}'>{{ user.username }}</a><br/>
+            {% empty %}
+            <h4>Not following any users</h4>
+            {% endfor %}
+
+            <hr/>
+        </div>
+        <div id="menu3" class="tab-pane fade">
             <h1>Followed By</h1>
-             {% for profile in object.followed_by.all %}
-             <a href='/{{ profile.user.username }}'>{{ profile.user.username }}</a><br/>
-             {% empty %}
-             <h4>Not followed by any users</h4>
-             {% endfor %}
+            {% for profile in object.followed_by.all %}
+            <a href='/{{ profile.user.username }}'>{{ profile.user.username }}</a><br/>
+            {% empty %}
+            <h4>Not followed by any users</h4>
+            {% endfor %}
+        </div>
     </div>
-  </div>
 
 </div>
 {% endblock full_content %}

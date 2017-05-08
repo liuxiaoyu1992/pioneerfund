@@ -1,45 +1,13 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from home.models import Projects
 import datetime
 from .forms import ProjectCreateForm
 from django.views.generic import RedirectView
-
+from .forms import ProjectRateForm, ProjectUpdateForm
+from django.contrib.auth import get_user_model
 
 # Create your views here.
-def project_comments(request, id=None):
-    instance = get_object_or_404(Projects, id=id)
-    context = {
-        "project_name": instance.pname,
-        "project_id": instance.id,
-        "project_minimum_amount": instance.minimum_amount,
-        "project_maximum_amount": instance.maximum_amount,
-        "days": (datetime.date.today() - instance.end_date).days,
-        "project_backers": instance.pledged_people_num,
-        "project_amount_pledged": instance.pledged_amount,
-        "project_description": instance.description,
-        "project_percent": (instance.pledged_amount / instance.minimum_amount) * 100,
-        "project_status": instance.status,
-        "instance": instance
-    }
-    return render(request, 'projects/project_comments.html', context)
-
-
-def project_updates(request, id=None):
-    instance = get_object_or_404(Projects, id=id)
-    context = {
-        "project_name": instance.pname,
-        "project_id": instance.id,
-        "project_minimum_amount": instance.minimum_amount,
-        "project_maximum_amount": instance.maximum_amount,
-        "days": (instance.end_date - datetime.date.today()).days,
-        "project_backers": instance.pledged_people_num,
-        "project_amount_pledged": instance.pledged_amount,
-        "project_description": instance.description,
-        "project_percent": (instance.pledged_amount / instance.minimum_amount) * 100,
-        "project_status": instance.status,
-        "instance": instance
-    }
-    return render(request, 'projects/project_updates.html', context)
+User = get_user_model()
 
 
 class ProjectLikeRedirect(RedirectView):
@@ -87,3 +55,45 @@ class ProjectLikeAPIToggle(APIView):
 
 def project_explore(request):
     return render(request, 'explore.html')
+
+def project_rate(request, id=None):
+    form = ProjectRateForm(request.POST or None)
+    if form.is_valid():
+        rate = form.save(commit=False)
+        rate.uid = User.objects.get(id=request.user.id)
+        rate.pid_id = id
+        rate.save()
+
+
+        url_ = "/projects/" + str(id)
+        return redirect(url_)
+    context = {
+        "form": form,
+        "title": 'Rate'
+    }
+    return render(request, "projects/project_create.html", context)
+
+def project_complete(request, id=None):
+    project = Projects.objects.get(id=id)
+    print(id)
+    print(project.status)
+    project.status = 'completed'
+    print(project.status)
+    project.save()
+    return redirect("home:project_list")
+
+def project_update(request, id=None):
+    form = ProjectUpdateForm(request.POST or None)
+    if form.is_valid():
+        rate = form.save(commit=False)
+        rate.uid = User.objects.get(id=request.user.id)
+        rate.pid_id = id
+        rate.save()
+
+        url_ = "/projects/" + str(id)
+        return redirect(url_)
+    context = {
+        "form": form,
+        "title": 'Project process update'
+    }
+    return render(request, "projects/project_create.html", context)

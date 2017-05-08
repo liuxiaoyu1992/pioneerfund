@@ -1,23 +1,15 @@
 from django import forms
-from home.models import Projects
+from home.models import Projects, Rates, Project_updates
 
 
 class ProjectCreateForm(forms.ModelForm):
-    # pname = forms.CharField(label='Project Name')
-    # cate_name = forms.CharField(label='Category')
-    # image = forms.CharField(label='Image')
-    # state = forms.CharField(label='Project Locate State')
-    # country = forms.CharField(label='Project Locate Country')
-    # minimum_amount = forms.FloatField(label='Minimum Pledge Amount')
-    # maximum_amount = forms.FloatField(label='Maximum Pledge Amount')
-    # end_date = forms.DateField(label='Pledge End Date')
-    # image = forms.ImageField()
     class Meta:
         model = Projects
         exclude = ["uid"]
         fields = [
             "pname",
             "cate_name",
+            "tags",
             "image",
             "state",
             "country",
@@ -30,6 +22,7 @@ class ProjectCreateForm(forms.ModelForm):
         labels = {
             "pname": "Project Name",
             "cate_name": "Category",
+            "tags": "Tags",
             "image": "Image",
             "state": "Project Locate State",
             "country": "Project Locate Country",
@@ -38,6 +31,24 @@ class ProjectCreateForm(forms.ModelForm):
             "end_date": "Pledge End Date"
         }
 
+class ProjectRateForm(forms.ModelForm):
+    class Meta:
+        model = Rates
+        exclude = ["uid", "pid"]
+        fields = [
+            "star"
+        ]
+        labels = {
+            "star": "Star"
+        }
 
-
-
+class ProjectUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Project_updates
+        exclude = ["uid", "pid"]
+        fields = [
+            "updates"
+        ]
+        labels = {
+            "updates": "Updates"
+        }

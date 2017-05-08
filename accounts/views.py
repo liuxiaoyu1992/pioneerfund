@@ -5,6 +5,7 @@ from django.contrib.auth import (
     login,
     logout
 )
+from home.models import Projects, Pledges
 from .models import UserProfile
 from .forms import UserLoginForm, UserRegisterForm, EditProfileForm, UserProfileForm
 from django.views.generic import DetailView
@@ -12,6 +13,7 @@ from django.views import View
 from django.urls import reverse
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.db.models import Q
 
 
 User = get_user_model()
@@ -105,10 +107,31 @@ class UserDetailView(DetailView):
             username__iexact=self.kwargs.get("username")
         )
 
+    # def get_projects(self):
+    #     projects = Projects.objects.filter(uid__username=self.kwargs.get("username"))
+    #     return projects
+
+
     def get_context_data(self, *args, **kwargs):
         context = super(UserDetailView, self).get_context_data(*args, **kwargs)
         following = UserProfile.objects.is_following(self.request.user, self.get_object())
+
+        my_pledges = Pledges.objects.filter(uid__username=self.kwargs.get("username")).values()
+        project_ids = set()
+        for pled in my_pledges:
+            project_ids.add(pled['pid_id'])
+        my_filter_qs = Q()
+        for project_id in project_ids:
+            my_filter_qs = my_filter_qs | Q(id=project_id)
+        backed_projects = Projects.objects.filter(my_filter_qs)
+
         context['following'] = following
+        context['created_projects'] = Projects.objects.filter(uid__username=self.kwargs.get("username"))
+        context['backed_projects'] = backed_projects
+        context['profiles'] = UserProfile.objects.get(user__username=self.kwargs.get("username"))
+
+
+        print(context)
         return context
 
 class UserFollowView(View):

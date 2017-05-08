@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from .fields import CreditCardField, ExpiryDateField, VerificationValueField
 from comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
+from taggit.managers import TaggableManager
 # Create your models here.
 
 def upload_location(instance, filename):
@@ -51,6 +52,7 @@ class Categories(models.Model):
 class Projects(models.Model):
     pname = models.CharField(max_length=50)
     cate_name = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    tags = TaggableManager()
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
     image = models.ImageField(upload_to=upload_location,
                               null=True,
@@ -86,8 +88,20 @@ class Projects(models.Model):
     def get_project_detail(self):
         return reverse("projects:project_detail", kwargs={"id": self.id})
 
-    def get_project_updates(self):
-        return reverse("projects:project_updates", kwargs={"id": self.id})
+    def get_project_update(self):
+        return reverse("projects:project_update", kwargs={"id": self.id})
+
+    def get_project_edit(self):
+        return reverse("projects:project_edit", kwargs={"id": self.id})
+
+    def get_project_rate(self):
+        return reverse("projects:project_rate", kwargs={"id": self.id})
+
+    def get_project_delete(self):
+        return reverse("projects:project_delete", kwargs={"id": self.id})
+
+    def get_project_complete(self):
+        return reverse("projects:project_complete", kwargs={"id": self.id})
 
     def get_project_comments(self):
         return reverse("projects:project_comments", kwargs={"id": self.id})
@@ -112,6 +126,27 @@ class Projects(models.Model):
         instance = self
         content_type = ContentType.objects.get_for_model(instance.__class__)
         return content_type
+
+class Project_updates(models.Model):
+    pid = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    updates = models.TextField(max_length=5000)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+RATE_CHOICES = (
+    (1, "*"),
+    (2, "**"),
+    (3, u"***"),
+    (4, u"****"),
+    (5, u"*****")
+)
+
+class Rates(models.Model):
+    pid = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    star = models.IntegerField(choices=RATE_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
 class CreditCards(models.Model):
     cnum = models.CharField(max_length=40)
