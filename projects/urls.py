@@ -12,7 +12,8 @@ from .views import (
     project_explore,
     project_rate,
     project_complete,
-    project_update
+    project_update,
+    SearchView,
 )
 urlpatterns = [
     url(r'^(?P<id>\d+)/$', project_detail, name='project_detail'),
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^(?P<id>\d+)/like/', ProjectLikeRedirect.as_view(), name='like_toggle'),
     url(r'^api/(?P<id>\d+)/like/', ProjectLikeAPIToggle.as_view(), name='api_like_toggle'),
     url(r'^explore/', project_explore, name='project_explore'),
+    url(r'^search/', SearchView.as_view(), name='project_search'),
 ]

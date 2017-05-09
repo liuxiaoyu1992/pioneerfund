@@ -95,6 +95,9 @@ $(document).ready(function(){
 						<p class="lead">day{% if days != 1 %}s{% endif %} left</p>
 					</div>
 				</div>
+                {% if not request.user.is_authenticated %}
+                <p>You need <a class="btn btn-lg btn-success" href="/login"><i class="icon-ok"></i>Log in</a> to pledge.</p>
+                {% else %}
 				{% if project_status == 'looking for funds' %}
 				<a class="btn btn-lg btn-success btn-block" href="{{ instance.get_pledge_url }}"><i class="icon-ok"></i>Contribute Now</a>
 				{% elif project_status == 'pledge succeeded' %}
@@ -104,6 +107,7 @@ $(document).ready(function(){
 				{% else %}
 				<a class="btn btn-lg btn-primary btn-block disabled" href=""><i class="icon-ok"></i>Completed</a>
 				{% endif %}
+                {% endif %}
 			</div>
 		</div>
 	</div>
