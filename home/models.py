@@ -197,6 +197,19 @@ class Charges(models.Model):
         default='succeeded'
     )
 
+class project_view_records(models.Model):
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    pid = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+class tag_search_records(models.Model):
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    tag_name = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class search_records(models.Model):
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    keyword = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 

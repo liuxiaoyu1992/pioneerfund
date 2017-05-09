@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import Projects, CreditCards, Pledges, Charges, Rates, Project_updates
+from .models import Projects, CreditCards, Pledges, Charges, Rates, Project_updates, project_view_records
 from django.conf import settings
 import datetime
 from projects.forms import ProjectCreateForm
@@ -129,6 +129,8 @@ def project_detail(request, id=None):
     if len(stars) > 0:
         avg_rate = sum(stars) / float(len(stars))
     updates = Project_updates.objects.filter(pid__id=id, uid__id=request.user.id)
+    # record the project views
+    project_view_records.objects.create(pid_id=id, uid_id=request.user.id)
 
 
     if form.is_valid() and request.user.is_authenticated():

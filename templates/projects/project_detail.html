@@ -54,12 +54,19 @@ $(document).ready(function(){
                 {% if instance.image %}
     				<img src='{{ instance.image.url }}' class='img-responsive' />
     			{% endif %}
-                <p>
-                    Tags:
+
+                <div class="row">
+                    <p>Tags:</p>
                     {% for tag in instance.tags.all %}
-                    {{ tag.name }}
+                    <div class="col-xs-2">
+                    <form method="POST" action="/projects/search/">
+                        {% csrf_token %}
+                        <input class="btn btn-success btn-flat" type="submit" name="tag" value="{{ tag.name }}" />
+                    </form>
+                    </div>
                     {% endfor %}
-                </p>
+
+                </div>
 
 			</div>
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from home.models import Projects, Categories
+from home.models import Projects, Categories, tag_search_records, search_records, project_view_records
 import datetime
 from .forms import ProjectCreateForm
 from django.views.generic import RedirectView
@@ -143,6 +143,8 @@ class SearchView(View):
         if "standard_search" in request.POST:
             words = request.POST["standard_search"]
             instance = Projects.objects.filter(pname__contains=words)
+            title = "Search results for keyword:" + words
+            search_records.objects.create(uid_id=request.user.id, keyword=words)
         elif "limit_search" in request.POST:
             category = request.POST["categories"]
             status = request.POST["status"]
@@ -154,6 +156,19 @@ class SearchView(View):
                 instance = Projects.objects.filter(status=status)
             else:
                 instance = Projects.objects.filter(cate_name__id=category, status=status)
+            if category == 'allCategories':
+                catename = 'All categories'
+            else:
+                catename = Categories.objects.get(id=category).catename
+            if status == 'allStatus':
+                status = 'All status'
+
+            title = "Search results for " + "category: " + catename + ", status: " + status
+        elif "tag" in request.POST:
+            tag = request.POST["tag"]
+            instance = Projects.objects.filter(tags__name__in=[tag])
+            title = "Search results for tag: " + tag
+            tag_search_records.objects.create(uid_id=request.user.id, tag_name=tag)
         else:
             instance = None
         projects = []
@@ -183,9 +198,19 @@ class SearchView(View):
                 'pledged_amount': pledged_amount,
                 'description': description,
                 'image': image,
-                'instance': ins,
+                'instance': ins
             })
         context = {
             "projects": projects,
+            'title': title
         }
         return render(request, 'projects/project_search_results.html', context)
+
+def Project_view_records(request):
+    title = "Recently viewed projects"
+    records = project_view_records.objects.filter(uid__id=request.user.id)
+    context = {
+        "records": records,
+        'title': title
+    }
+    
