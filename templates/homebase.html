@@ -22,13 +22,13 @@
           </ul>
             <ul class="nav nav-sidebar">
 
-              <li><a href="/home/my_backed_projects">Recently viewed projects</a></li>
-              <li><a href="/home/my_pledges">Recently tags searches</a></li>
-              <li><a href="/home/my_charges">Recently keyword searches</a></li>
+              <li><a href="/home/project_view_records">Recently viewed projects</a></li>
+              <li><a href="/home/tag_search_records">Recently tags searches</a></li>
+              <li><a href="/home/keyword_search_records">Recently keyword searches</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h3>Welcome, {{ request.user.username }}!</h3>
+          <h3>Welcome, <a href='/{{ request.user.username }}'>{{ request.user.username }}</a>!</h3>
 {% else %}
           <br>You need to login first, click the link to login.</div>
           <a href="/login">Login</a>{% endif %}

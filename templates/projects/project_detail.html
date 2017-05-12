@@ -51,6 +51,9 @@ $(document).ready(function(){
                     </div>
                     {% endif %}
                 </p>
+                {% if instance.files %}
+                    Files:<a href='{{ instance.files.url }}'>{{ instance.files.url }}</a>
+                {% endif %}
                 {% if instance.image %}
     				<img src='{{ instance.image.url }}' class='img-responsive' />
     			{% endif %}

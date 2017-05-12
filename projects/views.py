@@ -185,6 +185,7 @@ class SearchView(View):
             pledged_amount = ins.pledged_amount
             description = ins.description
             image = ins.image.url
+            status = ins.status
             projects.append({
                 'percent': percent,
                 'days': days,
@@ -198,7 +199,8 @@ class SearchView(View):
                 'pledged_amount': pledged_amount,
                 'description': description,
                 'image': image,
-                'instance': ins
+                'instance': ins,
+                'status': status
             })
         context = {
             "projects": projects,
@@ -208,9 +210,27 @@ class SearchView(View):
 
 def Project_view_records(request):
     title = "Recently viewed projects"
-    records = project_view_records.objects.filter(uid__id=request.user.id)
+    records = project_view_records.objects.filter(uid__id=request.user.id)[:10]
     context = {
         "records": records,
         'title': title
     }
-    
+    return render(request, 'home/project_view_records.html', context)
+
+def Tag_search_records(request):
+    title = "Recently searched tags"
+    records = tag_search_records.objects.filter(uid__id=request.user.id)[:10]
+    context = {
+        "records": records,
+        'title': title
+    }
+    return render(request, 'home/tag_search_records.html', context)
+
+def Keyword_search_records(request):
+    title = "Recent keyword search records"
+    records = search_records.objects.filter(uid__id=request.user.id)[:10]
+    context = {
+        "records": records,
+        'title': title
+    }
+    return render(request, 'home/keyword_search_records.html', context)

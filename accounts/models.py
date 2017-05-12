@@ -39,11 +39,11 @@ class UserProfileManager(models.Manager):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile')
-    address = models.CharField(max_length=100, blank=False)
-    city = models.CharField(max_length=30, blank=False)
-    state = models.CharField(max_length=30, blank=False)
-    country = models.CharField(max_length=30, blank=False)
-    interests = models.CharField(max_length=100, blank=False)
+    address = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=30, blank=True)
+    state = models.CharField(max_length=30, blank=True)
+    country = models.CharField(max_length=30, blank=True)
+    interests = models.CharField(max_length=100, blank=True)
     following = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='followed_by')
     avatar = models.ImageField(upload_to='avatar/',
                                default='avatar/default.png',

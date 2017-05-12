@@ -6,6 +6,7 @@ from .fields import CreditCardField, ExpiryDateField, VerificationValueField
 from comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from taggit.managers import TaggableManager
+
 # Create your models here.
 
 def upload_location(instance, filename):
@@ -55,12 +56,12 @@ class Projects(models.Model):
     tags = TaggableManager()
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
     image = models.ImageField(upload_to=upload_location,
-                              null=True,
-                              blank=True,
+                              default='project_picture/default.png',
                               width_field="width_field",
                               height_field="height_field")
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
+    files = models.FileField(upload_to='files/%y%m%d/', null=True, blank=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='project_likes')
     description = models.TextField(max_length=5000)
     state = models.CharField(max_length=40, null=True)

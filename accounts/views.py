@@ -69,7 +69,7 @@ def edit_personal_profile(request):
     title = 'Edit personal profile'
     user_profile = request.user.profile
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=user_profile)
+        form = UserProfileForm(request.POST or None, request.FILES or None,instance=user_profile)
 
         if form.is_valid():
             form.save()
@@ -118,12 +118,17 @@ class UserDetailView(DetailView):
 
         my_pledges = Pledges.objects.filter(uid__username=self.kwargs.get("username")).values()
         project_ids = set()
-        for pled in my_pledges:
-            project_ids.add(pled['pid_id'])
-        my_filter_qs = Q()
-        for project_id in project_ids:
-            my_filter_qs = my_filter_qs | Q(id=project_id)
-        backed_projects = Projects.objects.filter(my_filter_qs)
+        if my_pledges:
+            for pled in my_pledges:
+                project_ids.add(pled['pid_id'])
+                print("uid")
+                print(pled['uid_id'])
+            my_filter_qs = Q()
+            for project_id in project_ids:
+                my_filter_qs = my_filter_qs | Q(id=project_id)
+            backed_projects = Projects.objects.filter(my_filter_qs)
+        else:
+            backed_projects = None
 
         context['following'] = following
         context['created_projects'] = Projects.objects.filter(uid__username=self.kwargs.get("username"))

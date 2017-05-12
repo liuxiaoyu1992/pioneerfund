@@ -1,0 +1,26 @@
+{% extends "homebase.html" %}
+{% block content %}
+
+
+<h1 class="page-header">{{ title }}</h1>
+<table class=table>
+    <thead>
+    <tr>
+        <th>Keyword</th>
+        <th>Search time</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for record in records %}
+    <tr>
+
+        <td>{{ record.keyword }}</td>
+        <td>{{ record.created_at }}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

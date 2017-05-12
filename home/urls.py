@@ -10,8 +10,9 @@ from .views import (
     project_back_list,
     project_pledges,
     project_charges,
-    project_likes
+    project_likes,
 )
+from projects.views import Project_view_records, Tag_search_records, Keyword_search_records
 
 urlpatterns = [
     url(r'^$', index, name='index'),
@@ -25,4 +26,7 @@ urlpatterns = [
     url(r'^payment_methods/', payment_methods, name='payment_methods'),
     url(r'^creditcard_add/', creditcard_add, name='creditcard_add'),
     url(r'^creditcard_delete/(?P<id>\d+)/', creditcard_delete, name='creditcard_delete'),
+    url(r'^project_view_records/', Project_view_records, name='project_view_records'),
+    url(r'^tag_search_records/', Tag_search_records, name='tag_search_records'),
+    url(r'^keyword_search_records/', Keyword_search_records, name='keyword_search_records'),
 ]
